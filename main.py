@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 import selenium.common.exceptions
+import youtube_dl
 import pafy
 
 
@@ -24,10 +25,10 @@ def loadlist():
         list.append(v)
     print(list)
     videos = list
-    return
+    return list
 
 loadlist()
-videos = ['LNqEAe7VU5A', 'ZGBHxHPuXeM', '1GJq7iRbaP4']
+
 while(True):
     for i in videos:
         try:
@@ -43,10 +44,18 @@ while(True):
             print("Views : " + str(video.viewcount))
             print(" ")
             driver.get("https://www.youtube.com/watch?v=" + i)
-            play_btn = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[@title='Play (k)']")))
-            play_btn.click()
-            time.sleep(240)
+            time.sleep(2)
+            #play_btn = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//button[@title='Play (k)']")))
+            #play_btn.click()
+            time.sleep(200)
             driver.close()
-        except Exception as e:
+        except youtube_dl.utils.ExtractorError as e:
+            error("ER19 - [" + str(e) + "]")
+        except youtube_dl.utils.DownloadError as e:
+            error("ER19 - [" + str(e) + "]")
+        except OSError as e:
+            pass
+            #error("ER19 - [" + str(e) + "]")
+        except selenium.common.exceptions.TimeoutException as e:
             error("ER19 - [" + str(e) + "]")
 
